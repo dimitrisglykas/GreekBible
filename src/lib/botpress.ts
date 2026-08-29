@@ -81,6 +81,7 @@ export const BOTPRESS_INIT_CONFIG = {
 } as const;
 
 export type BotpressStatus = "idle" | "loading" | "ready" | "error";
+export type BotpressErrorKind = "network" | "blocked" | "timeout" | "init" | null;
 
 type BotpressApi = {
   init?: (config: unknown) => void;
@@ -89,7 +90,6 @@ type BotpressApi = {
   toggle?: () => void;
   sendMessage?: (text: string) => void;
   sendEvent?: (payload: Record<string, unknown>) => void;
-  updateUser?: (payload: Record<string, unknown>) => void;
   on?: (event: string, handler: (...args: unknown[]) => void) => void;
 };
 
@@ -99,15 +99,47 @@ declare global {
   }
 }
 
-let status: BotpressStatus = "idle";
-const listeners = new Set<(s: BotpressStatus) => void>();
-let readyResolvers: Array<() => void> = [];
+/** Fallback timeout (ms). Configurable at runtime + persisted per device. */
+const TIMEOUT_KEY = "greek-bible/bp-timeout";
+export const DEFAULT_BOTPRESS_TIMEOUT = 12_000;
+let timeoutMs = DEFAULT_BOTPRESS_TIMEOUT;
 
-function setStatus(next: BotpressStatus) {
+export function getBotpressTimeout() {
+  if (typeof window !== "undefined") {
+    const stored = Number(window.localStorage.getItem(TIMEOUT_KEY));
+    if (Number.isFinite(stored) && stored >= 3000) timeoutMs = stored;
+  }
+  return timeoutMs;
+}
+
+export function setBotpressTimeout(ms: number) {
+  timeoutMs = Math.min(60_000, Math.max(3_000, Math.round(ms)));
+  try {
+    window.localStorage.setItem(TIMEOUT_KEY, String(timeoutMs));
+  } catch {
+    /* storage unavailable */
+  }
+  return timeoutMs;
+}
+
+let status: BotpressStatus = "idle";
+let errorKind: BotpressErrorKind = null;
+const listeners = new Set<(s: BotpressStatus, e: BotpressErrorKind) => void>();
+let readyResolvers: Array<() => void> = [];
+let failResolvers: Array<(kind: BotpressErrorKind) => void> = [];
+
+function setStatus(next: BotpressStatus, kind: BotpressErrorKind = null) {
   status = next;
-  listeners.forEach((l) => l(next));
+  errorKind = next === "error" ? (kind ?? "network") : null;
+  listeners.forEach((l) => l(status, errorKind));
   if (next === "ready") {
     readyResolvers.forEach((r) => r());
+    readyResolvers = [];
+    failResolvers = [];
+  }
+  if (next === "error") {
+    failResolvers.forEach((r) => r(errorKind));
+    failResolvers = [];
     readyResolvers = [];
   }
 }
@@ -116,19 +148,47 @@ export function getBotpressStatus() {
   return status;
 }
 
-export function subscribeBotpressStatus(listener: (s: BotpressStatus) => void) {
+export function getBotpressError() {
+  return errorKind;
+}
+
+export function subscribeBotpressStatus(
+  listener: (s: BotpressStatus, e: BotpressErrorKind) => void,
+) {
   listeners.add(listener);
   return () => listeners.delete(listener);
 }
 
-/** Resolves when the webchat is ready, rejects if it failed / timed out. */
-export function whenBotpressReady(timeoutMs = 12_000) {
+/** Human-readable Greek message for each failure mode. */
+export function botpressErrorMessage(kind: BotpressErrorKind) {
+  switch (kind) {
+    case "blocked":
+      return "Ο Βοηθός μπλοκάρεται από τον browser ή κάποιο ad blocker. Δοκίμασε να απενεργοποιήσεις την αποκλειστική λειτουργία για αυτή τη σελίδα.";
+    case "timeout":
+      return "Ο Βοηθός αργεί πολύ να φορτώσει. Μπορεί να είναι αργή σύνδεση — δοκίμασε ξανά.";
+    case "init":
+      return "Ο Βοηθός φόρτωσε αλλά δεν ξεκίνησε σωστά. Μια ανανέωση συνήθως το λύνει.";
+    default:
+      return "Δεν υπάρχει σύνδεση με τον Βοηθό. Έλεγξε το internet και δοκίμασε ξανά.";
+  }
+}
+
+/** Resolves when the webchat is ready; rejects with the error kind on failure. */
+export function whenBotpressReady(ms = getBotpressTimeout()) {
   if (status === "ready") return Promise.resolve();
+  if (status === "error") return Promise.reject(new Error(errorKind ?? "network"));
   return new Promise<void>((resolve, reject) => {
-    const t = setTimeout(() => reject(new Error("botpress-timeout")), timeoutMs);
+    const t = setTimeout(() => {
+      setStatus("error", "timeout");
+      reject(new Error("timeout"));
+    }, ms);
     readyResolvers.push(() => {
       clearTimeout(t);
       resolve();
+    });
+    failResolvers.push((kind) => {
+      clearTimeout(t);
+      reject(new Error(kind ?? "network"));
     });
   });
 }
@@ -139,22 +199,25 @@ const SCRIPT_ID = "botpress-inject";
 export function loadBotpress({ retry = false } = {}) {
   if (typeof window === "undefined") return;
   if (!retry && (status === "loading" || status === "ready")) return;
-  if (retry) {
-    document.getElementById(SCRIPT_ID)?.remove();
-  }
+  if (retry) document.getElementById(SCRIPT_ID)?.remove();
 
+  const ms = getBotpressTimeout();
   setStatus("loading");
 
   const init = () => {
+    if (!window.botpress?.init) {
+      // Script tag reported load but nothing was registered → blocked/rewritten.
+      setStatus("error", "blocked");
+      return;
+    }
     try {
-      window.botpress?.init?.(BOTPRESS_INIT_CONFIG);
-      window.botpress?.on?.("webchat:ready", () => setStatus("ready"));
-      // Fallback: some versions are usable right after init.
+      window.botpress.init(BOTPRESS_INIT_CONFIG);
+      window.botpress.on?.("webchat:ready", () => setStatus("ready"));
       setTimeout(() => {
         if (status === "loading" && window.botpress?.open) setStatus("ready");
       }, 1500);
     } catch {
-      setStatus("error");
+      setStatus("error", "init");
     }
   };
 
@@ -168,11 +231,32 @@ export function loadBotpress({ retry = false } = {}) {
   script.src = BOTPRESS_INJECT_SRC;
   script.defer = true;
   script.addEventListener("load", init);
-  script.addEventListener("error", () => setStatus("error"));
+  script.addEventListener("error", () => setStatus("error", "blocked"));
   document.head.appendChild(script);
 
-  // Hard timeout so the UI never waits forever.
   setTimeout(() => {
-    if (status === "loading") setStatus("error");
-  }, 12_000);
+    if (status === "loading") setStatus("error", navigator.onLine ? "timeout" : "network");
+  }, ms);
+}
+
+/**
+ * Minimised verse-context payload.
+ *
+ * Only what the bot needs to answer: the reference, a trimmed verse snippet,
+ * the requested reply style and the language. No URLs, no ids, no reading
+ * history, no device or user data.
+ */
+export function minimalVerseContext(input: {
+  reference?: string | undefined;
+  text?: string | undefined;
+  style?: string | undefined;
+}) {
+  const payload: Record<string, string> = { type: "verse-context", language: "el" };
+  if (input.reference) payload.reference = input.reference.slice(0, 80);
+  if (input.text) {
+    const t = input.text.replace(/\s+/g, " ").trim();
+    payload.verse = t.length > 300 ? `${t.slice(0, 300)}…` : t;
+  }
+  if (input.style) payload.style = input.style;
+  return payload;
 }
