@@ -202,30 +202,38 @@ const SCRIPT_ID = "botpress-inject";
 export function loadBotpress({ retry = false } = {}) {
   if (typeof window === "undefined") return;
   if (!retry && (status === "loading" || status === "ready")) return;
-  if (retry) document.getElementById(SCRIPT_ID)?.remove();
+  if (retry) {
+    document.getElementById(SCRIPT_ID)?.remove();
+    document.getElementById(CONFIG_SCRIPT_ID)?.remove();
+  }
 
   const ms = getBotpressTimeout();
   setStatus("loading");
 
-  const init = () => {
-    if (!window.botpress?.init) {
-      // Script tag reported load but nothing was registered → blocked/rewritten.
+  const onReady = () => {
+    window.botpress?.on?.("webchat:ready", () => setStatus("ready"));
+    setTimeout(() => {
+      if (status === "loading" && window.botpress?.open) setStatus("ready");
+    }, 1500);
+  };
+
+  /** Loads the bot config script, which initialises the webchat itself. */
+  const loadConfig = () => {
+    if (!window.botpress) {
       setStatus("error", "blocked");
       return;
     }
-    try {
-      window.botpress.init(BOTPRESS_INIT_CONFIG);
-      window.botpress.on?.("webchat:ready", () => setStatus("ready"));
-      setTimeout(() => {
-        if (status === "loading" && window.botpress?.open) setStatus("ready");
-      }, 1500);
-    } catch {
-      setStatus("error", "init");
-    }
+    const config = document.createElement("script");
+    config.id = CONFIG_SCRIPT_ID;
+    config.src = BOTPRESS_CONFIG_SRC;
+    config.defer = true;
+    config.addEventListener("load", onReady);
+    config.addEventListener("error", () => setStatus("error", "init"));
+    document.head.appendChild(config);
   };
 
-  if (!retry && window.botpress?.init) {
-    init();
+  if (!retry && window.botpress) {
+    loadConfig();
     return;
   }
 
@@ -233,7 +241,7 @@ export function loadBotpress({ retry = false } = {}) {
   script.id = SCRIPT_ID;
   script.src = BOTPRESS_INJECT_SRC;
   script.defer = true;
-  script.addEventListener("load", init);
+  script.addEventListener("load", loadConfig);
   script.addEventListener("error", () => setStatus("error", "blocked"));
   document.head.appendChild(script);
 
