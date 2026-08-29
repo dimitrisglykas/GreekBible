@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { BookOpen, Flame, Highlighter, StickyNote } from "lucide-react";
+import { BookOpen, Flame, Highlighter, MessageCircle, StickyNote, Trash2 } from "lucide-react";
 
+import { useAssistant } from "@/components/assistant/AssistantProvider";
 import { ContinueReading } from "@/components/ContinueReading";
 import { Button } from "@/components/ui/button";
 import { PLANS } from "@/data/content";
 import { reference } from "@/lib/bible";
+import { REPLY_STYLES } from "@/lib/assistant-question";
 import { computeStreak, HIGHLIGHT_COLORS, useLibrary } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +27,8 @@ export const Route = createFileRoute("/profil")({
 });
 
 function ProfilePage() {
-  const { data, toggleBookmark, setHighlight, removeNote } = useLibrary();
+  const { data, toggleBookmark, setHighlight, removeNote, removeConversation } = useLibrary();
+  const { open } = useAssistant();
   const streak = computeStreak(data.readingDays);
 
   const stats = [
@@ -57,6 +60,57 @@ function ProfilePage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section>
+        <h2 className="font-serif text-xl font-semibold">Πρόσφατες συζητήσεις</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Οι 5 τελευταίες ερωτήσεις σου στον Βοηθό — μόνο στη συσκευή σου.
+        </p>
+        {data.conversations.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">
+            Δεν έχεις ξεκινήσει συζήτηση ακόμα.
+          </p>
+        ) : (
+          <ul className="mt-3 space-y-2">
+            {data.conversations.map((c) => (
+              <li key={c.id} className="surface-card flex items-start gap-3 p-4">
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-primary">{c.title}</p>
+                  <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{c.question}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Ύφος: {REPLY_STYLES.find((s) => s.value === c.style)?.label ?? "Ήρεμο"}
+                  </p>
+                </div>
+                <div className="flex shrink-0 flex-col gap-2">
+                  <Button
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() =>
+                      open({
+                        reference: c.title,
+                        suggestion: `Ας συνεχίσουμε τη συζήτηση για ${c.title}.\n${c.question}`,
+                        style: c.style,
+                      })
+                    }
+                  >
+                    <MessageCircle className="mr-1.5 size-3.5" aria-hidden />
+                    Συνέχισε
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="rounded-full"
+                    onClick={() => removeConversation(c.id)}
+                    aria-label={`Διαγραφή συζήτησης ${c.title}`}
+                  >
+                    <Trash2 className="size-3.5" aria-hidden />
+                  </Button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section>
