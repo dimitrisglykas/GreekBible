@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VivlosIndexRouteImport } from './routes/vivlos.index'
+import { Route as VivlosBookChapterRouteImport } from './routes/vivlos.$book.$chapter'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const VivlosIndexRoute = VivlosIndexRouteImport.update({
   path: '/vivlos/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VivlosBookChapterRoute = VivlosBookChapterRouteImport.update({
+  id: '/vivlos/$book/$chapter',
+  path: '/vivlos/$book/$chapter',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/vivlos/': typeof VivlosIndexRoute
+  '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/vivlos': typeof VivlosIndexRoute
+  '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/vivlos/': typeof VivlosIndexRoute
+  '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/vivlos/'
+  fullPaths: '/' | '/vivlos/' | '/vivlos/$book/$chapter'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/vivlos'
-  id: '__root__' | '/' | '/vivlos/'
+  to: '/' | '/vivlos' | '/vivlos/$book/$chapter'
+  id: '__root__' | '/' | '/vivlos/' | '/vivlos/$book/$chapter'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   VivlosIndexRoute: typeof VivlosIndexRoute
+  VivlosBookChapterRoute: typeof VivlosBookChapterRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VivlosIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/vivlos/$book/$chapter': {
+      id: '/vivlos/$book/$chapter'
+      path: '/vivlos/$book/$chapter'
+      fullPath: '/vivlos/$book/$chapter'
+      preLoaderRoute: typeof VivlosBookChapterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   VivlosIndexRoute: VivlosIndexRoute,
+  VivlosBookChapterRoute: VivlosBookChapterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
