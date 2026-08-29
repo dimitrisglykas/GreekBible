@@ -197,6 +197,7 @@ export function whenBotpressReady(ms = getBotpressTimeout()) {
 }
 
 const SCRIPT_ID = "botpress-inject";
+const CONFIG_SCRIPT_ID = "botpress-config";
 
 /** Loads inject.js + initialises the webchat once. Safe to call repeatedly. */
 export function loadBotpress({ retry = false } = {}) {
