@@ -31,11 +31,6 @@ export const Route = createFileRoute("/vivlos/$book/$chapter")({
       ],
     };
   },
-  loader: ({ context, params }) =>
-    Promise.all([
-      context.queryClient.ensureQueryData(booksQuery),
-      context.queryClient.ensureQueryData(bookQuery(params.book)),
-    ]),
   component: Reader,
 });
 

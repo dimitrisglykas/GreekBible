@@ -34,7 +34,6 @@ export const Route = createFileRoute("/anazitisi")({
       },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(booksQuery),
   component: SearchPage,
 });
 
