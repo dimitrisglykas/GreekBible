@@ -17,6 +17,7 @@ import { Route as AnakalypseIndexRouteImport } from './routes/anakalypse.index'
 import { Route as AnakalypseTopicRouteImport } from './routes/anakalypse.$topic'
 import { Route as IisousIndexRouteImport } from './routes/iisous.index'
 import { Route as IisousSectionRouteImport } from './routes/iisous.$section'
+import { Route as ProgrammataIndexRouteImport } from './routes/programmata.index'
 import { Route as VivlosIndexRouteImport } from './routes/vivlos.index'
 import { Route as VivlosBookChapterRouteImport } from './routes/vivlos.$book.$chapter'
 
@@ -60,6 +61,11 @@ const IisousSectionRoute = IisousSectionRouteImport.update({
   path: '/iisous/$section',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProgrammataIndexRoute = ProgrammataIndexRouteImport.update({
+  id: '/programmata/',
+  path: '/programmata/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VivlosIndexRoute = VivlosIndexRouteImport.update({
   id: '/vivlos/',
   path: '/vivlos/',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/iisous/$section': typeof IisousSectionRoute
   '/anakalypse/': typeof AnakalypseIndexRoute
   '/iisous/': typeof IisousIndexRoute
+  '/programmata/': typeof ProgrammataIndexRoute
   '/vivlos/': typeof VivlosIndexRoute
   '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/iisous/$section': typeof IisousSectionRoute
   '/anakalypse': typeof AnakalypseIndexRoute
   '/iisous': typeof IisousIndexRoute
+  '/programmata': typeof ProgrammataIndexRoute
   '/vivlos': typeof VivlosIndexRoute
   '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/iisous/$section': typeof IisousSectionRoute
   '/anakalypse/': typeof AnakalypseIndexRoute
   '/iisous/': typeof IisousIndexRoute
+  '/programmata/': typeof ProgrammataIndexRoute
   '/vivlos/': typeof VivlosIndexRoute
   '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/iisous/$section'
     | '/anakalypse/'
     | '/iisous/'
+    | '/programmata/'
     | '/vivlos/'
     | '/vivlos/$book/$chapter'
   fileRoutesByTo: FileRoutesByTo
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/iisous/$section'
     | '/anakalypse'
     | '/iisous'
+    | '/programmata'
     | '/vivlos'
     | '/vivlos/$book/$chapter'
   id:
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/iisous/$section'
     | '/anakalypse/'
     | '/iisous/'
+    | '/programmata/'
     | '/vivlos/'
     | '/vivlos/$book/$chapter'
   fileRoutesById: FileRoutesById
@@ -156,6 +168,7 @@ export interface RootRouteChildren {
   IisousSectionRoute: typeof IisousSectionRoute
   AnakalypseIndexRoute: typeof AnakalypseIndexRoute
   IisousIndexRoute: typeof IisousIndexRoute
+  ProgrammataIndexRoute: typeof ProgrammataIndexRoute
   VivlosIndexRoute: typeof VivlosIndexRoute
   VivlosBookChapterRoute: typeof VivlosBookChapterRoute
 }
@@ -218,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IisousSectionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/programmata/': {
+      id: '/programmata/'
+      path: '/programmata'
+      fullPath: '/programmata/'
+      preLoaderRoute: typeof ProgrammataIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/vivlos/': {
       id: '/vivlos/'
       path: '/vivlos'
@@ -244,6 +264,7 @@ const rootRouteChildren: RootRouteChildren = {
   IisousSectionRoute: IisousSectionRoute,
   AnakalypseIndexRoute: AnakalypseIndexRoute,
   IisousIndexRoute: IisousIndexRoute,
+  ProgrammataIndexRoute: ProgrammataIndexRoute,
   VivlosIndexRoute: VivlosIndexRoute,
   VivlosBookChapterRoute: VivlosBookChapterRoute,
 }
