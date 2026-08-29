@@ -66,8 +66,6 @@ const STOPWORDS = new Set([
   "γιατι",
 ]);
 
-export default function noop() {}
-
 function SearchPage() {
   const { data: books } = useQuery(booksQuery);
   const [query, setQuery] = useState("");

@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AnazitisiRouteImport } from './routes/anazitisi'
 import { Route as VivlosIndexRouteImport } from './routes/vivlos.index'
 import { Route as VivlosBookChapterRouteImport } from './routes/vivlos.$book.$chapter'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnazitisiRoute = AnazitisiRouteImport.update({
+  id: '/anazitisi',
+  path: '/anazitisi',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VivlosIndexRoute = VivlosIndexRouteImport.update({
@@ -31,30 +37,34 @@ const VivlosBookChapterRoute = VivlosBookChapterRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/anazitisi': typeof AnazitisiRoute
   '/vivlos/': typeof VivlosIndexRoute
   '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/anazitisi': typeof AnazitisiRoute
   '/vivlos': typeof VivlosIndexRoute
   '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/anazitisi': typeof AnazitisiRoute
   '/vivlos/': typeof VivlosIndexRoute
   '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/vivlos/' | '/vivlos/$book/$chapter'
+  fullPaths: '/' | '/anazitisi' | '/vivlos/' | '/vivlos/$book/$chapter'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/vivlos' | '/vivlos/$book/$chapter'
-  id: '__root__' | '/' | '/vivlos/' | '/vivlos/$book/$chapter'
+  to: '/' | '/anazitisi' | '/vivlos' | '/vivlos/$book/$chapter'
+  id: '__root__' | '/' | '/anazitisi' | '/vivlos/' | '/vivlos/$book/$chapter'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnazitisiRoute: typeof AnazitisiRoute
   VivlosIndexRoute: typeof VivlosIndexRoute
   VivlosBookChapterRoute: typeof VivlosBookChapterRoute
 }
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/anazitisi': {
+      id: '/anazitisi'
+      path: '/anazitisi'
+      fullPath: '/anazitisi'
+      preLoaderRoute: typeof AnazitisiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/vivlos/': {
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnazitisiRoute: AnazitisiRoute,
   VivlosIndexRoute: VivlosIndexRoute,
   VivlosBookChapterRoute: VivlosBookChapterRoute,
 }
