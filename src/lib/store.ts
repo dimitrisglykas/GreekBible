@@ -8,6 +8,8 @@
  */
 import { useCallback, useEffect, useState } from "react";
 
+import type { ReplyStyle } from "@/lib/assistant-question";
+
 export interface SavedVerse {
   id: string;
   bookId: string;
@@ -221,8 +223,34 @@ export function useLibrary() {
     [update],
   );
 
+  const saveConversation = useCallback(
+    (c: { title: string; question: string; style: ReplyStyle }) =>
+      update((d) => ({
+        ...d,
+        conversations: [
+          { id: uid(), ...c, question: c.question.trim(), createdAt: new Date().toISOString() },
+          ...d.conversations.filter((x) => x.title !== c.title),
+        ].slice(0, 5),
+      })),
+    [update],
+  );
+
+  const removeConversation = useCallback(
+    (id: string) =>
+      update((d) => ({ ...d, conversations: d.conversations.filter((c) => c.id !== id) })),
+    [update],
+  );
+
+  const setReplyStyle = useCallback(
+    (replyStyle: ReplyStyle) => update((d) => ({ ...d, replyStyle })),
+    [update],
+  );
+
   return {
     data,
+    saveConversation,
+    removeConversation,
+    setReplyStyle,
     toggleBookmark,
     setHighlight,
     saveNote,
