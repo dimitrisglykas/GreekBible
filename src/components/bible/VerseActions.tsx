@@ -1,4 +1,4 @@
-import { BookOpen, Copy, Highlighter, MessageCircle, Share2, StickyNote, X } from "lucide-react";
+import { BookOpen, Copy, Highlighter, MessageCircle, Share2, Sparkle, StickyNote, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link } from "@tanstack/react-router";
@@ -21,7 +21,7 @@ export function VerseActions({
   showContextLink?: boolean;
 }) {
   const { data, toggleBookmark, setHighlight, saveNote } = useLibrary();
-  const { open } = useAssistant();
+  const { open, compose } = useAssistant();
   const [noteOpen, setNoteOpen] = useState(false);
   const [share, setShare] = useState(false);
   const [note, setNote] = useState("");
@@ -123,7 +123,15 @@ export function VerseActions({
               icon={<MessageCircle className="size-5" />}
               label="Ρώτησε τον Βοηθό"
               onClick={() => {
-                open({ reference: ref, text: verse.text, suggestion: `Τι σημαίνει το ${ref};` });
+                open({ reference: ref, text: verse.text });
+                onClose();
+              }}
+            />
+            <ActionTile
+              icon={<Sparkle className="size-5" />}
+              label="Χτίσε ερώτηση"
+              onClick={() => {
+                compose({ reference: ref, text: verse.text });
                 onClose();
               }}
             />

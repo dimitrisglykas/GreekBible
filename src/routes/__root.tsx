@@ -107,7 +107,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Commissioner:wght@300..800&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..600&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
     // Botpress Webchat is injected once from `@/lib/botpress` so it can carry a
     // Greek configuration, retry on failure, and never mount twice.

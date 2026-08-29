@@ -8,6 +8,8 @@
  */
 import { useCallback, useEffect, useState } from "react";
 
+import type { ReplyStyle } from "@/lib/assistant-question";
+
 export interface SavedVerse {
   id: string;
   bookId: string;
@@ -49,6 +51,17 @@ export interface PlanProgress {
   startedAt: string;
 }
 
+/** A lightweight record of an assistant conversation (last 5 kept, local only). */
+export interface AssistantConversation {
+  id: string;
+  /** verse reference or topic that titled the conversation */
+  title: string;
+  /** the question that started it (trimmed) */
+  question: string;
+  style: ReplyStyle;
+  createdAt: string;
+}
+
 export interface UserData {
   bookmarks: SavedVerse[];
   highlights: Highlight[];
@@ -58,6 +71,8 @@ export interface UserData {
   readingDays: string[];
   prayers: PrayerEntry[];
   plans: PlanProgress[];
+  conversations: AssistantConversation[];
+  replyStyle: ReplyStyle;
 }
 
 const EMPTY: UserData = {
@@ -69,6 +84,8 @@ const EMPTY: UserData = {
   readingDays: [],
   prayers: [],
   plans: [],
+  conversations: [],
+  replyStyle: "calm",
 };
 
 const KEY = "greek-bible/user-v1";
@@ -206,8 +223,34 @@ export function useLibrary() {
     [update],
   );
 
+  const saveConversation = useCallback(
+    (c: { title: string; question: string; style: ReplyStyle }) =>
+      update((d) => ({
+        ...d,
+        conversations: [
+          { id: uid(), ...c, question: c.question.trim(), createdAt: new Date().toISOString() },
+          ...d.conversations.filter((x) => x.title !== c.title),
+        ].slice(0, 5),
+      })),
+    [update],
+  );
+
+  const removeConversation = useCallback(
+    (id: string) =>
+      update((d) => ({ ...d, conversations: d.conversations.filter((c) => c.id !== id) })),
+    [update],
+  );
+
+  const setReplyStyle = useCallback(
+    (replyStyle: ReplyStyle) => update((d) => ({ ...d, replyStyle })),
+    [update],
+  );
+
   return {
     data,
+    saveConversation,
+    removeConversation,
+    setReplyStyle,
     toggleBookmark,
     setHighlight,
     saveNote,
