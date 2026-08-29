@@ -36,14 +36,14 @@ function PlanPage() {
   const { data, togglePlanDay } = useLibrary();
   const progress = data.plans.find((p) => p.planId === plan.id);
   const completed = progress?.completedDays ?? [];
-  const nextDay = plan.days.find((d) => !completed.includes(d.day)) ?? plan.days[0];
+  const nextDay = plan.days.find((d) => !completed.includes(d.day)) ?? plan.days[0]!;
   const [activeDay, setActiveDay] = useState(nextDay.day);
 
   useEffect(() => {
     setActiveDay(nextDay.day);
   }, [nextDay.day]);
 
-  const day = plan.days.find((d) => d.day === activeDay) ?? plan.days[0];
+  const day = plan.days.find((d) => d.day === activeDay) ?? plan.days[0]!;
   const pct = Math.round((completed.length / plan.days.length) * 100);
   const isDone = completed.includes(day.day);
 

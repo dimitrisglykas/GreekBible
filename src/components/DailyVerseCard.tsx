@@ -13,7 +13,7 @@ import { DAILY_VERSES, dailyIndex } from "@/data/content";
 import { useLibrary } from "@/lib/store";
 
 export function DailyVerseCard({ showThought = true }: { showThought?: boolean }) {
-  const entry = DAILY_VERSES[dailyIndex()];
+  const entry = DAILY_VERSES[dailyIndex()]!;
   const { data } = useQuery(bookQuery(entry.ref.book));
   const { data: user, toggleBookmark } = useLibrary();
   const [share, setShare] = useState(false);

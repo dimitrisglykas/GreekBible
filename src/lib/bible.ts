@@ -146,12 +146,12 @@ export function parseReferenceQuery(query: string, books: BookMeta[]) {
   const m = query.trim().match(/^(.+?)\s+(\d+)(?:\s*[:.,]\s*(\d+))?$/);
   if (!m) return null;
   const [, rawName, chapter, verse] = m;
-  const needle = normalizeGreek(rawName);
+  const needle = normalizeGreek(rawName ?? "");
   const book =
     books.find((b) => normalizeGreek(b.name) === needle) ??
     books.find((b) => normalizeGreek(b.name).includes(needle)) ??
     books.find((b) => normalizeGreek(b.id).includes(needle));
   if (!book) return null;
   const ch = Math.min(Math.max(1, Number(chapter)), book.chapters.length);
-  return { book, chapter: ch, verse: verse ? Number(verse) : undefined };
+  return { book, chapter: ch, ...(verse ? { verse: Number(verse) } : {}) };
 }

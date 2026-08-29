@@ -8,7 +8,7 @@ export const Route = createFileRoute("/iisous/$section")({
   loader: ({ params }) => {
     const index = JESUS_SECTIONS.findIndex((s) => s.slug === params.section);
     if (index === -1) throw notFound();
-    return { section: JESUS_SECTIONS[index], next: JESUS_SECTIONS[index + 1] ?? null };
+    return { section: JESUS_SECTIONS[index]!, next: JESUS_SECTIONS[index + 1] ?? null };
   },
   head: ({ loaderData }) => {
     if (!loaderData) {

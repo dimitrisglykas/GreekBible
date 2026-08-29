@@ -306,8 +306,8 @@ export interface ReadingPlan {
 const p = (book: string, chapter: number, from?: number, to?: number): PassageRef => ({
   book,
   chapter,
-  from,
-  to,
+  ...(from === undefined ? {} : { from }),
+  ...(to === undefined ? {} : { to }),
 });
 
 function buildPlan(

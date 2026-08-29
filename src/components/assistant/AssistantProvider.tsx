@@ -29,11 +29,11 @@ import { cn } from "@/lib/utils";
 
 export interface AssistantContextPayload {
   /** e.g. "Κατά Ιωάννην 3:16" */
-  reference?: string;
+  reference?: string | undefined;
   /** the verse text itself */
-  text?: string;
+  text?: string | undefined;
   /** a suggested first question */
-  suggestion?: string;
+  suggestion?: string | undefined;
 }
 
 interface AssistantApi {
@@ -239,8 +239,8 @@ export function AskAssistantButton({
   label = "Ρώτησε τον Βοηθό",
   className,
 }: {
-  reference?: string;
-  text?: string;
+  reference?: string | undefined;
+  text?: string | undefined;
   label?: string;
   className?: string;
 }) {

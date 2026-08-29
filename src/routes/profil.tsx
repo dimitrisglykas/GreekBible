@@ -4,6 +4,7 @@ import { BookOpen, Flame, Highlighter, StickyNote } from "lucide-react";
 import { ContinueReading } from "@/components/ContinueReading";
 import { Button } from "@/components/ui/button";
 import { PLANS } from "@/data/content";
+import { reference } from "@/lib/bible";
 import { computeStreak, HIGHLIGHT_COLORS, useLibrary } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
@@ -64,7 +65,7 @@ function ProfilePage() {
           <ul className="mt-4 space-y-3">
             {data.bookmarks.map((b) => (
               <li key={b.id} className="surface-card p-5">
-                <p className="text-xs font-semibold text-primary">{b.reference}</p>
+                <p className="text-xs font-semibold text-primary">{reference(b.bookName, b.chapter, b.verse)}</p>
                 <p className="scripture mt-2">{b.text}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Button asChild variant="outline" size="sm" className="rounded-full">
@@ -100,7 +101,7 @@ function ProfilePage() {
           <ul className="mt-4 space-y-2">
             {data.highlights.map((h) => (
               <li key={h.id} className="surface-card p-4">
-                <p className="text-xs font-semibold text-primary">{h.reference}</p>
+                <p className="text-xs font-semibold text-primary">{reference(h.bookName, h.chapter, h.verse)}</p>
                 <p
                   className={cn(
                     "scripture mt-1.5 rounded-md px-1",
@@ -131,7 +132,7 @@ function ProfilePage() {
           <ul className="mt-4 space-y-2">
             {data.notes.map((n) => (
               <li key={n.id} className="surface-card p-4">
-                <p className="text-xs font-semibold text-primary">{n.reference}</p>
+                <p className="text-xs font-semibold text-primary">{reference(n.bookName, n.chapter, n.verse)}</p>
                 <p className="mt-1.5 text-sm leading-relaxed whitespace-pre-wrap">{n.body}</p>
                 <Button
                   variant="ghost"
