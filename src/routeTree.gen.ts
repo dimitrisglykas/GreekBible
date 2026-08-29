@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnazitisiRouteImport } from './routes/anazitisi'
 import { Route as KsekinaRouteImport } from './routes/ksekina'
+import { Route as ProsefchiRouteImport } from './routes/prosefchi'
 import { Route as SimeraRouteImport } from './routes/simera'
 import { Route as AnakalypseIndexRouteImport } from './routes/anakalypse.index'
 import { Route as AnakalypseTopicRouteImport } from './routes/anakalypse.$topic'
@@ -35,6 +36,11 @@ const AnazitisiRoute = AnazitisiRouteImport.update({
 const KsekinaRoute = KsekinaRouteImport.update({
   id: '/ksekina',
   path: '/ksekina',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProsefchiRoute = ProsefchiRouteImport.update({
+  id: '/prosefchi',
+  path: '/prosefchi',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SimeraRoute = SimeraRouteImport.update({
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/anazitisi': typeof AnazitisiRoute
   '/ksekina': typeof KsekinaRoute
+  '/prosefchi': typeof ProsefchiRoute
   '/simera': typeof SimeraRoute
   '/anakalypse/$topic': typeof AnakalypseTopicRoute
   '/iisous/$section': typeof IisousSectionRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/anazitisi': typeof AnazitisiRoute
   '/ksekina': typeof KsekinaRoute
+  '/prosefchi': typeof ProsefchiRoute
   '/simera': typeof SimeraRoute
   '/anakalypse/$topic': typeof AnakalypseTopicRoute
   '/iisous/$section': typeof IisousSectionRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/anazitisi': typeof AnazitisiRoute
   '/ksekina': typeof KsekinaRoute
+  '/prosefchi': typeof ProsefchiRoute
   '/simera': typeof SimeraRoute
   '/anakalypse/$topic': typeof AnakalypseTopicRoute
   '/iisous/$section': typeof IisousSectionRoute
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/'
     | '/anazitisi'
     | '/ksekina'
+    | '/prosefchi'
     | '/simera'
     | '/anakalypse/$topic'
     | '/iisous/$section'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/'
     | '/anazitisi'
     | '/ksekina'
+    | '/prosefchi'
     | '/simera'
     | '/anakalypse/$topic'
     | '/iisous/$section'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/'
     | '/anazitisi'
     | '/ksekina'
+    | '/prosefchi'
     | '/simera'
     | '/anakalypse/$topic'
     | '/iisous/$section'
@@ -175,6 +187,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnazitisiRoute: typeof AnazitisiRoute
   KsekinaRoute: typeof KsekinaRoute
+  ProsefchiRoute: typeof ProsefchiRoute
   SimeraRoute: typeof SimeraRoute
   AnakalypseTopicRoute: typeof AnakalypseTopicRoute
   IisousSectionRoute: typeof IisousSectionRoute
@@ -207,6 +220,13 @@ declare module '@tanstack/react-router' {
       path: '/ksekina'
       fullPath: '/ksekina'
       preLoaderRoute: typeof KsekinaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prosefchi': {
+      id: '/prosefchi'
+      path: '/prosefchi'
+      fullPath: '/prosefchi'
+      preLoaderRoute: typeof ProsefchiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/simera': {
@@ -279,6 +299,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnazitisiRoute: AnazitisiRoute,
   KsekinaRoute: KsekinaRoute,
+  ProsefchiRoute: ProsefchiRoute,
   SimeraRoute: SimeraRoute,
   AnakalypseTopicRoute: AnakalypseTopicRoute,
   IisousSectionRoute: IisousSectionRoute,
