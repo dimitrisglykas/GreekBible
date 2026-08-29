@@ -7,6 +7,9 @@
  */
 
 export const BOTPRESS_INJECT_SRC = "https://cdn.botpress.cloud/webchat/v5.0/inject.js";
+/** Bot-specific configuration script (auto-initialises the webchat). */
+export const BOTPRESS_CONFIG_SRC =
+  "https://files.bpcontent.cloud/2026/08/29/15/20260829152113-ZF8D6V3M.js";
 
 const BOT_ID = "6f96bbc3-6e6f-4bcb-ba72-d8b4d0616868";
 const CLIENT_ID = "794bea02-8860-4b58-833a-e094906ba944";
@@ -194,35 +197,44 @@ export function whenBotpressReady(ms = getBotpressTimeout()) {
 }
 
 const SCRIPT_ID = "botpress-inject";
+const CONFIG_SCRIPT_ID = "botpress-config";
 
 /** Loads inject.js + initialises the webchat once. Safe to call repeatedly. */
 export function loadBotpress({ retry = false } = {}) {
   if (typeof window === "undefined") return;
   if (!retry && (status === "loading" || status === "ready")) return;
-  if (retry) document.getElementById(SCRIPT_ID)?.remove();
+  if (retry) {
+    document.getElementById(SCRIPT_ID)?.remove();
+    document.getElementById(CONFIG_SCRIPT_ID)?.remove();
+  }
 
   const ms = getBotpressTimeout();
   setStatus("loading");
 
-  const init = () => {
-    if (!window.botpress?.init) {
-      // Script tag reported load but nothing was registered → blocked/rewritten.
+  const onReady = () => {
+    window.botpress?.on?.("webchat:ready", () => setStatus("ready"));
+    setTimeout(() => {
+      if (status === "loading" && window.botpress?.open) setStatus("ready");
+    }, 1500);
+  };
+
+  /** Loads the bot config script, which initialises the webchat itself. */
+  const loadConfig = () => {
+    if (!window.botpress) {
       setStatus("error", "blocked");
       return;
     }
-    try {
-      window.botpress.init(BOTPRESS_INIT_CONFIG);
-      window.botpress.on?.("webchat:ready", () => setStatus("ready"));
-      setTimeout(() => {
-        if (status === "loading" && window.botpress?.open) setStatus("ready");
-      }, 1500);
-    } catch {
-      setStatus("error", "init");
-    }
+    const config = document.createElement("script");
+    config.id = CONFIG_SCRIPT_ID;
+    config.src = BOTPRESS_CONFIG_SRC;
+    config.defer = true;
+    config.addEventListener("load", onReady);
+    config.addEventListener("error", () => setStatus("error", "init"));
+    document.head.appendChild(config);
   };
 
-  if (!retry && window.botpress?.init) {
-    init();
+  if (!retry && window.botpress) {
+    loadConfig();
     return;
   }
 
@@ -230,7 +242,7 @@ export function loadBotpress({ retry = false } = {}) {
   script.id = SCRIPT_ID;
   script.src = BOTPRESS_INJECT_SRC;
   script.defer = true;
-  script.addEventListener("load", init);
+  script.addEventListener("load", loadConfig);
   script.addEventListener("error", () => setStatus("error", "blocked"));
   document.head.appendChild(script);
 
