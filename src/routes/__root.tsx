@@ -77,19 +77,31 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Ελληνική Βίβλος — Γνώρισε τον Λόγο, γνώρισε τον Χριστό" },
+      {
+        name: "description",
+        content:
+          "Διάβασε την Αγία Γραφή στα ελληνικά, αναζήτησε εδάφια, κάνε ερωτήσεις και ανακάλυψε ποιος είναι ο Ιησούς.",
+      },
+      { property: "og:title", content: "Ελληνική Βίβλος — Γνώρισε τον Λόγο" },
+      {
+        property: "og:description",
+        content: "Η Αγία Γραφή, πιο κοντά σου από ποτέ. Διάβασε, αναζήτησε, ρώτησε, ανακάλυψε.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "el_GR" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
+      },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Commissioner:wght@300..800&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..600&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
