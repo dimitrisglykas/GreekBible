@@ -49,6 +49,17 @@ export interface PlanProgress {
   startedAt: string;
 }
 
+/** A lightweight record of an assistant conversation (last 5 kept, local only). */
+export interface AssistantConversation {
+  id: string;
+  /** verse reference or topic that titled the conversation */
+  title: string;
+  /** the question that started it (trimmed) */
+  question: string;
+  style: ReplyStyle;
+  createdAt: string;
+}
+
 export interface UserData {
   bookmarks: SavedVerse[];
   highlights: Highlight[];
@@ -58,6 +69,8 @@ export interface UserData {
   readingDays: string[];
   prayers: PrayerEntry[];
   plans: PlanProgress[];
+  conversations: AssistantConversation[];
+  replyStyle: ReplyStyle;
 }
 
 const EMPTY: UserData = {
@@ -69,6 +82,8 @@ const EMPTY: UserData = {
   readingDays: [],
   prayers: [],
   plans: [],
+  conversations: [],
+  replyStyle: "calm",
 };
 
 const KEY = "greek-bible/user-v1";
