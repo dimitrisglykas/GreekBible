@@ -252,11 +252,11 @@ export function minimalVerseContext(input: {
   style?: string | undefined;
 }) {
   const payload: Record<string, string> = { type: "verse-context", language: "el" };
-  if (input.reference) payload.reference = input.reference.slice(0, 80);
+  if (input.reference) payload['reference'] = input.reference.slice(0, 80);
   if (input.text) {
     const t = input.text.replace(/\s+/g, " ").trim();
-    payload.verse = t.length > 300 ? `${t.slice(0, 300)}…` : t;
+    payload['verse'] = t.length > 300 ? `${t.slice(0, 300)}…` : t;
   }
-  if (input.style) payload.style = input.style;
+  if (input.style) payload['style'] = input.style;
   return payload;
 }
