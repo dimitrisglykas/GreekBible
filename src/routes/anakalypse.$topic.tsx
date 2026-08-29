@@ -45,7 +45,10 @@ function TopicPage() {
 
       <div className="mt-8 space-y-4">
         {topic.passages.map((ref) => (
-          <PassageBlock key={ref} passage={ref} />
+          <PassageBlock
+            key={`${ref.book}-${ref.chapter}-${ref.from ?? 0}`}
+            passage={ref}
+          />
         ))}
       </div>
 

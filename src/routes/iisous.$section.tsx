@@ -18,9 +18,9 @@ export const Route = createFileRoute("/iisous/$section")({
     return {
       meta: [
         { title: `${section.title} — Γνώρισε τον Ιησού` },
-        { name: "description", content: section.summary },
+        { name: "description", content: section.question },
         { property: "og:title", content: `${section.title} — Γνώρισε τον Ιησού` },
-        { property: "og:description", content: section.summary },
+        { property: "og:description", content: section.question },
       ],
     };
   },
@@ -36,7 +36,7 @@ function JesusSection() {
         ← Γνώρισε τον Ιησού
       </Link>
       <h1 className="mt-4 font-serif text-3xl font-semibold md:text-4xl">{section.title}</h1>
-      <p className="mt-3 text-lg leading-relaxed text-muted-foreground">{section.summary}</p>
+      <p className="mt-3 text-lg leading-relaxed text-muted-foreground">{section.question}</p>
       {section.body.map((para) => (
         <p key={para} className="mt-4 leading-relaxed">
           {para}
@@ -46,7 +46,10 @@ function JesusSection() {
       <h2 className="mt-10 font-serif text-xl font-semibold">Διάβασέ το ο ίδιος</h2>
       <div className="mt-4 space-y-4">
         {section.passages.map((ref) => (
-          <PassageBlock key={ref} passage={ref} />
+          <PassageBlock
+            key={`${ref.book}-${ref.chapter}-${ref.from ?? 0}`}
+            passage={ref}
+          />
         ))}
       </div>
 

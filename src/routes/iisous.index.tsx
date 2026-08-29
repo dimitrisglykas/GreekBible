@@ -44,7 +44,7 @@ function JesusIndex() {
               <span>
                 <span className="block font-serif text-lg font-semibold">{s.title}</span>
                 <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">
-                  {s.summary}
+                  {s.question}
                 </span>
               </span>
             </Link>

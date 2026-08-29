@@ -37,14 +37,14 @@ function StartPage() {
 
       <ul className="mt-8 grid gap-3 sm:grid-cols-2">
         {START_OPTIONS.map((o) => (
-          <li key={o.id}>
+          <li key={o.label}>
             <button
               type="button"
               onClick={() => setChoice(o)}
-              aria-pressed={choice?.id === o.id}
+              aria-pressed={choice?.label === o.label}
               className={cn(
                 "surface-card w-full p-5 text-left transition-transform hover:-translate-y-0.5",
-                choice?.id === o.id && "ring-2 ring-primary",
+                choice?.label === o.label && "ring-2 ring-primary",
               )}
             >
               <span className="mr-2 text-xl" aria-hidden>
@@ -58,12 +58,15 @@ function StartPage() {
 
       {choice && (
         <section className="animate-fade mt-10" aria-live="polite">
-          <h2 className="font-serif text-2xl font-semibold">{choice.resultTitle}</h2>
-          <p className="mt-2 text-muted-foreground">{choice.resultText}</p>
+          <h2 className="font-serif text-2xl font-semibold">{choice.label}</h2>
+          <p className="mt-2 text-muted-foreground">{choice.answer}</p>
 
           <div className="mt-6 space-y-4">
             {choice.passages.map((ref) => (
-              <PassageBlock key={ref} passage={ref} />
+              <PassageBlock
+                key={`${ref.book}-${ref.chapter}-${ref.from ?? 0}`}
+                passage={ref}
+              />
             ))}
           </div>
 
