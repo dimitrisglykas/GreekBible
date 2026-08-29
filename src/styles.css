@@ -251,3 +251,28 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+/* Botpress Webchat: respect reduced motion + keep focus visible inside the widget */
+@media (prefers-reduced-motion: reduce) {
+  #bp-web-widget,
+  #webchat,
+  [class*="bpWebchat"],
+  [class*="bpFab"] {
+    animation: none !important;
+    transition: none !important;
+  }
+  #bp-web-widget *,
+  #webchat *,
+  [class*="bpWebchat"] * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+#bp-web-widget :focus-visible,
+#webchat :focus-visible,
+[class*="bpWebchat"] :focus-visible,
+[class*="bpFab"]:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
