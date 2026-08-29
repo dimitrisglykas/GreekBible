@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnazitisiRouteImport } from './routes/anazitisi'
 import { Route as SimeraRouteImport } from './routes/simera'
+import { Route as AnakalypseIndexRouteImport } from './routes/anakalypse.index'
 import { Route as VivlosIndexRouteImport } from './routes/vivlos.index'
 import { Route as VivlosBookChapterRouteImport } from './routes/vivlos.$book.$chapter'
 
@@ -30,6 +31,11 @@ const SimeraRoute = SimeraRouteImport.update({
   path: '/simera',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AnakalypseIndexRoute = AnakalypseIndexRouteImport.update({
+  id: '/anakalypse/',
+  path: '/anakalypse/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VivlosIndexRoute = VivlosIndexRouteImport.update({
   id: '/vivlos/',
   path: '/vivlos/',
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/anazitisi': typeof AnazitisiRoute
   '/simera': typeof SimeraRoute
+  '/anakalypse/': typeof AnakalypseIndexRoute
   '/vivlos/': typeof VivlosIndexRoute
   '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/anazitisi': typeof AnazitisiRoute
   '/simera': typeof SimeraRoute
+  '/anakalypse': typeof AnakalypseIndexRoute
   '/vivlos': typeof VivlosIndexRoute
   '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
@@ -60,20 +68,33 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/anazitisi': typeof AnazitisiRoute
   '/simera': typeof SimeraRoute
+  '/anakalypse/': typeof AnakalypseIndexRoute
   '/vivlos/': typeof VivlosIndexRoute
   '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/anazitisi' | '/simera' | '/vivlos/' | '/vivlos/$book/$chapter'
+    | '/'
+    | '/anazitisi'
+    | '/simera'
+    | '/anakalypse/'
+    | '/vivlos/'
+    | '/vivlos/$book/$chapter'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/anazitisi' | '/simera' | '/vivlos' | '/vivlos/$book/$chapter'
+  to:
+    | '/'
+    | '/anazitisi'
+    | '/simera'
+    | '/anakalypse'
+    | '/vivlos'
+    | '/vivlos/$book/$chapter'
   id:
     | '__root__'
     | '/'
     | '/anazitisi'
     | '/simera'
+    | '/anakalypse/'
     | '/vivlos/'
     | '/vivlos/$book/$chapter'
   fileRoutesById: FileRoutesById
@@ -82,6 +103,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnazitisiRoute: typeof AnazitisiRoute
   SimeraRoute: typeof SimeraRoute
+  AnakalypseIndexRoute: typeof AnakalypseIndexRoute
   VivlosIndexRoute: typeof VivlosIndexRoute
   VivlosBookChapterRoute: typeof VivlosBookChapterRoute
 }
@@ -109,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SimeraRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/anakalypse/': {
+      id: '/anakalypse/'
+      path: '/anakalypse'
+      fullPath: '/anakalypse/'
+      preLoaderRoute: typeof AnakalypseIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/vivlos/': {
       id: '/vivlos/'
       path: '/vivlos'
@@ -130,6 +159,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnazitisiRoute: AnazitisiRoute,
   SimeraRoute: SimeraRoute,
+  AnakalypseIndexRoute: AnakalypseIndexRoute,
   VivlosIndexRoute: VivlosIndexRoute,
   VivlosBookChapterRoute: VivlosBookChapterRoute,
 }
