@@ -109,13 +109,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
-    scripts: [
-      { src: "https://cdn.botpress.cloud/webchat/v5.0/inject.js" },
-      {
-        src: "https://files.bpcontent.cloud/2026/08/29/15/20260829152113-ZF8D6V3M.js",
-        defer: true,
-      },
-    ],
+    // Botpress Webchat is injected once from `@/lib/botpress` so it can carry a
+    // Greek configuration, retry on failure, and never mount twice.
   }),
   shellComponent: RootShell,
   component: RootComponent,
