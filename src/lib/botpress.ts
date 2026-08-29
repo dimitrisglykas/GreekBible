@@ -7,6 +7,9 @@
  */
 
 export const BOTPRESS_INJECT_SRC = "https://cdn.botpress.cloud/webchat/v5.0/inject.js";
+/** Bot-specific configuration script (auto-initialises the webchat). */
+export const BOTPRESS_CONFIG_SRC =
+  "https://files.bpcontent.cloud/2026/08/29/15/20260829152113-ZF8D6V3M.js";
 
 const BOT_ID = "6f96bbc3-6e6f-4bcb-ba72-d8b4d0616868";
 const CLIENT_ID = "794bea02-8860-4b58-833a-e094906ba944";
