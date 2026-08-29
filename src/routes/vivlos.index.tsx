@@ -22,7 +22,7 @@ export const Route = createFileRoute("/vivlos/")({
       },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(booksQuery),
+  
   component: BibleIndex,
 });
 
