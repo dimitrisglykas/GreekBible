@@ -90,7 +90,7 @@ function SearchPage() {
       const terms = normalizeGreek(q)
         .split(" ")
         .filter((t) => t.length > 2 && !STOPWORDS.has(t))
-        .map((t) => (t.length > 5 ? t.slice(0, t.length - 2) : t));
+        .map((t) => (t.length > 5 ? t.slice(0, Math.max(5, t.length - 3)) : t));
 
       if (!terms.length) {
         setResults([]);
