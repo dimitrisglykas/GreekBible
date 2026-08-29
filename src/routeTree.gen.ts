@@ -10,33 +10,206 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AnazitisiRouteImport } from './routes/anazitisi'
+import { Route as KsekinaRouteImport } from './routes/ksekina'
+import { Route as ProfilRouteImport } from './routes/profil'
+import { Route as ProsefchiRouteImport } from './routes/prosefchi'
+import { Route as SimeraRouteImport } from './routes/simera'
+import { Route as AnakalypseIndexRouteImport } from './routes/anakalypse.index'
+import { Route as AnakalypseTopicRouteImport } from './routes/anakalypse.$topic'
+import { Route as IisousIndexRouteImport } from './routes/iisous.index'
+import { Route as IisousSectionRouteImport } from './routes/iisous.$section'
+import { Route as ProgrammataIndexRouteImport } from './routes/programmata.index'
+import { Route as ProgrammataPlanRouteImport } from './routes/programmata.$plan'
+import { Route as VivlosIndexRouteImport } from './routes/vivlos.index'
+import { Route as VivlosBookChapterRouteImport } from './routes/vivlos.$book.$chapter'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AnazitisiRoute = AnazitisiRouteImport.update({
+  id: '/anazitisi',
+  path: '/anazitisi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KsekinaRoute = KsekinaRouteImport.update({
+  id: '/ksekina',
+  path: '/ksekina',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilRoute = ProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProsefchiRoute = ProsefchiRouteImport.update({
+  id: '/prosefchi',
+  path: '/prosefchi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimeraRoute = SimeraRouteImport.update({
+  id: '/simera',
+  path: '/simera',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnakalypseIndexRoute = AnakalypseIndexRouteImport.update({
+  id: '/anakalypse/',
+  path: '/anakalypse/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnakalypseTopicRoute = AnakalypseTopicRouteImport.update({
+  id: '/anakalypse/$topic',
+  path: '/anakalypse/$topic',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IisousIndexRoute = IisousIndexRouteImport.update({
+  id: '/iisous/',
+  path: '/iisous/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IisousSectionRoute = IisousSectionRouteImport.update({
+  id: '/iisous/$section',
+  path: '/iisous/$section',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgrammataIndexRoute = ProgrammataIndexRouteImport.update({
+  id: '/programmata/',
+  path: '/programmata/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgrammataPlanRoute = ProgrammataPlanRouteImport.update({
+  id: '/programmata/$plan',
+  path: '/programmata/$plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VivlosIndexRoute = VivlosIndexRouteImport.update({
+  id: '/vivlos/',
+  path: '/vivlos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VivlosBookChapterRoute = VivlosBookChapterRouteImport.update({
+  id: '/vivlos/$book/$chapter',
+  path: '/vivlos/$book/$chapter',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/anazitisi': typeof AnazitisiRoute
+  '/ksekina': typeof KsekinaRoute
+  '/profil': typeof ProfilRoute
+  '/prosefchi': typeof ProsefchiRoute
+  '/simera': typeof SimeraRoute
+  '/anakalypse/$topic': typeof AnakalypseTopicRoute
+  '/iisous/$section': typeof IisousSectionRoute
+  '/programmata/$plan': typeof ProgrammataPlanRoute
+  '/anakalypse/': typeof AnakalypseIndexRoute
+  '/iisous/': typeof IisousIndexRoute
+  '/programmata/': typeof ProgrammataIndexRoute
+  '/vivlos/': typeof VivlosIndexRoute
+  '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/anazitisi': typeof AnazitisiRoute
+  '/ksekina': typeof KsekinaRoute
+  '/profil': typeof ProfilRoute
+  '/prosefchi': typeof ProsefchiRoute
+  '/simera': typeof SimeraRoute
+  '/anakalypse/$topic': typeof AnakalypseTopicRoute
+  '/iisous/$section': typeof IisousSectionRoute
+  '/programmata/$plan': typeof ProgrammataPlanRoute
+  '/anakalypse': typeof AnakalypseIndexRoute
+  '/iisous': typeof IisousIndexRoute
+  '/programmata': typeof ProgrammataIndexRoute
+  '/vivlos': typeof VivlosIndexRoute
+  '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/anazitisi': typeof AnazitisiRoute
+  '/ksekina': typeof KsekinaRoute
+  '/profil': typeof ProfilRoute
+  '/prosefchi': typeof ProsefchiRoute
+  '/simera': typeof SimeraRoute
+  '/anakalypse/$topic': typeof AnakalypseTopicRoute
+  '/iisous/$section': typeof IisousSectionRoute
+  '/programmata/$plan': typeof ProgrammataPlanRoute
+  '/anakalypse/': typeof AnakalypseIndexRoute
+  '/iisous/': typeof IisousIndexRoute
+  '/programmata/': typeof ProgrammataIndexRoute
+  '/vivlos/': typeof VivlosIndexRoute
+  '/vivlos/$book/$chapter': typeof VivlosBookChapterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/anazitisi'
+    | '/ksekina'
+    | '/profil'
+    | '/prosefchi'
+    | '/simera'
+    | '/anakalypse/$topic'
+    | '/iisous/$section'
+    | '/programmata/$plan'
+    | '/anakalypse/'
+    | '/iisous/'
+    | '/programmata/'
+    | '/vivlos/'
+    | '/vivlos/$book/$chapter'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/anazitisi'
+    | '/ksekina'
+    | '/profil'
+    | '/prosefchi'
+    | '/simera'
+    | '/anakalypse/$topic'
+    | '/iisous/$section'
+    | '/programmata/$plan'
+    | '/anakalypse'
+    | '/iisous'
+    | '/programmata'
+    | '/vivlos'
+    | '/vivlos/$book/$chapter'
+  id:
+    | '__root__'
+    | '/'
+    | '/anazitisi'
+    | '/ksekina'
+    | '/profil'
+    | '/prosefchi'
+    | '/simera'
+    | '/anakalypse/$topic'
+    | '/iisous/$section'
+    | '/programmata/$plan'
+    | '/anakalypse/'
+    | '/iisous/'
+    | '/programmata/'
+    | '/vivlos/'
+    | '/vivlos/$book/$chapter'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnazitisiRoute: typeof AnazitisiRoute
+  KsekinaRoute: typeof KsekinaRoute
+  ProfilRoute: typeof ProfilRoute
+  ProsefchiRoute: typeof ProsefchiRoute
+  SimeraRoute: typeof SimeraRoute
+  AnakalypseTopicRoute: typeof AnakalypseTopicRoute
+  IisousSectionRoute: typeof IisousSectionRoute
+  ProgrammataPlanRoute: typeof ProgrammataPlanRoute
+  AnakalypseIndexRoute: typeof AnakalypseIndexRoute
+  IisousIndexRoute: typeof IisousIndexRoute
+  ProgrammataIndexRoute: typeof ProgrammataIndexRoute
+  VivlosIndexRoute: typeof VivlosIndexRoute
+  VivlosBookChapterRoute: typeof VivlosBookChapterRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +221,115 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/anazitisi': {
+      id: '/anazitisi'
+      path: '/anazitisi'
+      fullPath: '/anazitisi'
+      preLoaderRoute: typeof AnazitisiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ksekina': {
+      id: '/ksekina'
+      path: '/ksekina'
+      fullPath: '/ksekina'
+      preLoaderRoute: typeof KsekinaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profil': {
+      id: '/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof ProfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prosefchi': {
+      id: '/prosefchi'
+      path: '/prosefchi'
+      fullPath: '/prosefchi'
+      preLoaderRoute: typeof ProsefchiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simera': {
+      id: '/simera'
+      path: '/simera'
+      fullPath: '/simera'
+      preLoaderRoute: typeof SimeraRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/anakalypse/': {
+      id: '/anakalypse/'
+      path: '/anakalypse'
+      fullPath: '/anakalypse/'
+      preLoaderRoute: typeof AnakalypseIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/anakalypse/$topic': {
+      id: '/anakalypse/$topic'
+      path: '/anakalypse/$topic'
+      fullPath: '/anakalypse/$topic'
+      preLoaderRoute: typeof AnakalypseTopicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/iisous/': {
+      id: '/iisous/'
+      path: '/iisous'
+      fullPath: '/iisous/'
+      preLoaderRoute: typeof IisousIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/iisous/$section': {
+      id: '/iisous/$section'
+      path: '/iisous/$section'
+      fullPath: '/iisous/$section'
+      preLoaderRoute: typeof IisousSectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programmata/': {
+      id: '/programmata/'
+      path: '/programmata'
+      fullPath: '/programmata/'
+      preLoaderRoute: typeof ProgrammataIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programmata/$plan': {
+      id: '/programmata/$plan'
+      path: '/programmata/$plan'
+      fullPath: '/programmata/$plan'
+      preLoaderRoute: typeof ProgrammataPlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vivlos/': {
+      id: '/vivlos/'
+      path: '/vivlos'
+      fullPath: '/vivlos/'
+      preLoaderRoute: typeof VivlosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vivlos/$book/$chapter': {
+      id: '/vivlos/$book/$chapter'
+      path: '/vivlos/$book/$chapter'
+      fullPath: '/vivlos/$book/$chapter'
+      preLoaderRoute: typeof VivlosBookChapterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnazitisiRoute: AnazitisiRoute,
+  KsekinaRoute: KsekinaRoute,
+  ProfilRoute: ProfilRoute,
+  ProsefchiRoute: ProsefchiRoute,
+  SimeraRoute: SimeraRoute,
+  AnakalypseTopicRoute: AnakalypseTopicRoute,
+  IisousSectionRoute: IisousSectionRoute,
+  ProgrammataPlanRoute: ProgrammataPlanRoute,
+  AnakalypseIndexRoute: AnakalypseIndexRoute,
+  IisousIndexRoute: IisousIndexRoute,
+  ProgrammataIndexRoute: ProgrammataIndexRoute,
+  VivlosIndexRoute: VivlosIndexRoute,
+  VivlosBookChapterRoute: VivlosBookChapterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
