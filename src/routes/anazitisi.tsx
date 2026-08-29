@@ -34,7 +34,6 @@ export const Route = createFileRoute("/anazitisi")({
       },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(booksQuery),
   component: SearchPage,
 });
 
@@ -86,9 +85,12 @@ function SearchPage() {
       setResults(null);
       setRefHit(parseReferenceQuery(q, books));
 
+      // Greek is heavily inflected, so match on a light stem (prefix) rather
+      // than the exact word form the user typed.
       const terms = normalizeGreek(q)
         .split(" ")
-        .filter((t) => t.length > 2 && !STOPWORDS.has(t));
+        .filter((t) => t.length > 2 && !STOPWORDS.has(t))
+        .map((t) => (t.length > 5 ? t.slice(0, Math.max(5, t.length - 3)) : t));
 
       if (!terms.length) {
         setResults([]);

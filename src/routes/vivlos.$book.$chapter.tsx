@@ -14,16 +14,16 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/vivlos/$book/$chapter")({
   head: ({ params }) => {
-    const ref = `${params.book} ${params.chapter}`;
+    const title = `Κεφάλαιο ${params.chapter} — Ανάγνωση Αγίας Γραφής`;
     return {
       meta: [
-        { title: `Ανάγνωση: ${ref} — Ελληνική Βίβλος` },
+        { title },
         {
           name: "description",
           content:
             "Διάβασε το κεφάλαιο σε ένα ήσυχο περιβάλλον ανάγνωσης: επισήμανε, κράτα σημειώσεις και ρώτησε τον Βοηθό για κάθε εδάφιο.",
         },
-        { property: "og:title", content: `Ανάγνωση: ${ref}` },
+        { property: "og:title", content: title },
         {
           property: "og:description",
           content: "Ήσυχη ανάγνωση της Αγίας Γραφής στα ελληνικά.",
@@ -31,11 +31,6 @@ export const Route = createFileRoute("/vivlos/$book/$chapter")({
       ],
     };
   },
-  loader: ({ context, params }) =>
-    Promise.all([
-      context.queryClient.ensureQueryData(booksQuery),
-      context.queryClient.ensureQueryData(bookQuery(params.book)),
-    ]),
   component: Reader,
 });
 
